@@ -40,7 +40,7 @@ func (r *Repository) GetAllWidgets() ([]listing.Widget, error) {
 	return widgets, nil
 }
 
-func (r *Repository) GetWidget(id int) (*listing.Widget, error) {
+func (r *Repository) GetWidget(id uint) (*listing.Widget, error) {
 	var we WidgetEntity
 	result := r.db.First(&we, id)
 
@@ -60,7 +60,7 @@ func (r *Repository) GetWidget(id int) (*listing.Widget, error) {
 	return &widget, nil
 }
 
-func (r *Repository) AddWidget(widget *saving.Widget) error {
+func (r *Repository) AddWidget(widget *saving.Widget) (*listing.Widget, error) {
 	we := &WidgetEntity{
 		Description: widget.Description,
 		Owner:       widget.Owner,
@@ -68,10 +68,14 @@ func (r *Repository) AddWidget(widget *saving.Widget) error {
 
 	result := r.db.Create(we)
 
-	return result.Error
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return r.GetWidget(we.ID)
 }
 
-func (r *Repository) UpdateWidget(id int, widget *saving.Widget) error {
+func (r *Repository) UpdateWidget(id uint, widget *saving.Widget) error {
 	var we WidgetEntity
 	result := r.db.First(&we, id)
 

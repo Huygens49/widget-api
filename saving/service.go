@@ -1,13 +1,15 @@
 package saving
 
+import "github.com/Huygens49/widget-api/listing"
+
 type repository interface {
-	AddWidget(widget *Widget) error
-	UpdateWidget(id int, widget *Widget) error
+	AddWidget(widget *Widget) (*listing.Widget, error)
+	UpdateWidget(id uint, widget *Widget) error
 }
 
 type Service interface {
-	AddWidget(widget *Widget) error
-	UpdateWidget(id int, widget *Widget) error
+	AddWidget(widget *Widget) (*listing.Widget, error)
+	UpdateWidget(id uint, widget *Widget) error
 }
 
 type service struct {
@@ -18,10 +20,10 @@ func NewService(r repository) Service {
 	return &service{r: r}
 }
 
-func (s *service) AddWidget(w *Widget) error {
+func (s *service) AddWidget(w *Widget) (*listing.Widget, error) {
 	return s.r.AddWidget(w)
 }
 
-func (s *service) UpdateWidget(id int, w *Widget) error {
+func (s *service) UpdateWidget(id uint, w *Widget) error {
 	return s.r.UpdateWidget(id, w)
 }
