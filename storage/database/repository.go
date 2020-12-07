@@ -85,11 +85,13 @@ func (r *Repository) UpdateWidget(id uint, widget saving.Widget) error {
 		return result.Error
 	}
 
-	result = r.db.Model(&we).Updates(WidgetEntity{Description: widget.Description, Owner: widget.Owner, Value: widget.Value})
-
-	if result.Error != nil {
-		return result.Error
+	ue := WidgetEntity{
+		Description: widget.Description,
+		Owner:       widget.Owner,
+		Value:       widget.Value,
 	}
 
-	return nil
+	result = r.db.Model(&we).Updates(ue)
+
+	return result.Error
 }
