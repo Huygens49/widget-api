@@ -7,7 +7,7 @@ import (
 
 type repository interface {
 	GetWidget(id uint) (*reading.Widget, error)
-	UpdateWidget(id uint, widget *saving.Widget) error
+	UpdateWidget(id uint, widget saving.Widget) error
 }
 
 type Service interface {
@@ -19,10 +19,10 @@ type service struct {
 }
 
 func NewService(r repository) Service {
-	return service{r: r}
+	return &service{r: r}
 }
 
-func (s service) WorkOnWidget(id uint) error {
+func (s *service) WorkOnWidget(id uint) error {
 	rw, err := s.r.GetWidget(id)
 
 	if err != nil {
@@ -32,7 +32,7 @@ func (s service) WorkOnWidget(id uint) error {
 	widget := &Widget{Value: rw.Value}
 	widget.Work()
 
-	sw := &saving.Widget{
+	sw := saving.Widget{
 		Description: rw.Description,
 		Owner:       rw.Owner,
 		Value:       widget.Value,

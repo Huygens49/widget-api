@@ -62,7 +62,7 @@ func (r *Repository) GetWidget(id uint) (*reading.Widget, error) {
 	return &widget, nil
 }
 
-func (r *Repository) AddWidget(widget *saving.Widget) (*reading.Widget, error) {
+func (r *Repository) AddWidget(widget saving.Widget) (*reading.Widget, error) {
 	we := &WidgetEntity{
 		Description: widget.Description,
 		Owner:       widget.Owner,
@@ -77,7 +77,7 @@ func (r *Repository) AddWidget(widget *saving.Widget) (*reading.Widget, error) {
 	return r.GetWidget(we.ID)
 }
 
-func (r *Repository) UpdateWidget(id uint, widget *saving.Widget) error {
+func (r *Repository) UpdateWidget(id uint, widget saving.Widget) error {
 	var we WidgetEntity
 	result := r.db.First(&we, id)
 

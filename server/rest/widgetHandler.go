@@ -62,7 +62,7 @@ func PostWidget(s saving.Service) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		newWidget, err := s.AddWidget(&widget)
+		newWidget, err := s.AddWidget(widget)
 
 		if err != nil {
 			fmt.Println(err)
@@ -94,7 +94,7 @@ func PutWidget(s saving.Service) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		s.UpdateWidget(uint(id), &widget)
+		s.UpdateWidget(uint(id), widget)
 
 		w.WriteHeader(http.StatusNoContent)
 	}
