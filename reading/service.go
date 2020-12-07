@@ -1,4 +1,4 @@
-package listing
+package reading
 
 type repository interface {
 	GetWidget(id uint) (*Widget, error)

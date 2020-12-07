@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Huygens49/widget-api/listing"
+	"github.com/Huygens49/widget-api/reading"
 	"github.com/Huygens49/widget-api/saving"
 	"github.com/Huygens49/widget-api/server/rest"
 
@@ -33,7 +33,7 @@ func main() {
 
 	// Setting up dependency injection
 	r := database.NewRepository(db)
-	l := listing.NewService(r)
+	l := reading.NewService(r)
 	s := saving.NewService(r)
 
 	// Setup the router

@@ -1,14 +1,14 @@
 package saving
 
-import "github.com/Huygens49/widget-api/listing"
+import "github.com/Huygens49/widget-api/reading"
 
 type repository interface {
-	AddWidget(widget *Widget) (*listing.Widget, error)
+	AddWidget(widget *Widget) (*reading.Widget, error)
 	UpdateWidget(id uint, widget *Widget) error
 }
 
 type Service interface {
-	AddWidget(widget *Widget) (*listing.Widget, error)
+	AddWidget(widget *Widget) (*reading.Widget, error)
 	UpdateWidget(id uint, widget *Widget) error
 }
 
@@ -20,7 +20,7 @@ func NewService(r repository) Service {
 	return &service{r: r}
 }
 
-func (s *service) AddWidget(w *Widget) (*listing.Widget, error) {
+func (s *service) AddWidget(w *Widget) (*reading.Widget, error) {
 	return s.r.AddWidget(w)
 }
 

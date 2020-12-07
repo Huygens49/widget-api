@@ -8,11 +8,11 @@ import (
 
 	"github.com/Huygens49/widget-api/saving"
 
-	"github.com/Huygens49/widget-api/listing"
+	"github.com/Huygens49/widget-api/reading"
 	"github.com/gorilla/mux"
 )
 
-func GetWidgets(l listing.Service) func(w http.ResponseWriter, r *http.Request) {
+func GetWidgets(l reading.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
@@ -27,7 +27,7 @@ func GetWidgets(l listing.Service) func(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-func GetWidget(l listing.Service) func(w http.ResponseWriter, r *http.Request) {
+func GetWidget(l reading.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
