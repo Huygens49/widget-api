@@ -29,6 +29,7 @@ func (r *Repository) GetAllWidgets() ([]reading.Widget, error) {
 			ID:          we.ID,
 			Description: we.Description,
 			Owner:       we.Owner,
+			Value:       we.Value,
 			CreatedAt:   we.CreatedAt,
 			UpdatedAt:   we.UpdatedAt,
 			DeletedAt:   we.DeletedAt.Time,
@@ -52,6 +53,7 @@ func (r *Repository) GetWidget(id uint) (*reading.Widget, error) {
 		ID:          we.ID,
 		Description: we.Description,
 		Owner:       we.Owner,
+		Value:       we.Value,
 		CreatedAt:   we.CreatedAt,
 		UpdatedAt:   we.UpdatedAt,
 		DeletedAt:   we.DeletedAt.Time,
@@ -83,7 +85,7 @@ func (r *Repository) UpdateWidget(id uint, widget *saving.Widget) error {
 		return result.Error
 	}
 
-	result = r.db.Model(&we).Updates(WidgetEntity{Description: widget.Description, Owner: widget.Owner})
+	result = r.db.Model(&we).Updates(WidgetEntity{Description: widget.Description, Owner: widget.Owner, Value: widget.Value})
 
 	if result.Error != nil {
 		return result.Error
