@@ -66,6 +66,7 @@ func (r *Repository) AddWidget(widget saving.Widget) (*reading.Widget, error) {
 	we := &WidgetEntity{
 		Description: widget.Description,
 		Owner:       widget.Owner,
+		Value:       widget.Value,
 	}
 
 	result := r.db.Create(we)
