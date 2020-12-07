@@ -15,15 +15,15 @@ type service struct {
 }
 
 func NewService(r repository) Service {
-	return &service{r: r}
+	return service{r: r}
 }
 
-func (s *service) GetWidget(id uint) (*Widget, error) {
+func (s service) GetWidget(id uint) (*Widget, error) {
 	w, err := s.r.GetWidget(id)
 	return w, err
 }
 
-func (s *service) GetAllWidgets() ([]Widget, error) {
+func (s service) GetAllWidgets() ([]Widget, error) {
 	w, err := s.r.GetAllWidgets()
 	return w, err
 }

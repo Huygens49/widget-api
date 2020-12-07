@@ -19,10 +19,10 @@ type service struct {
 }
 
 func NewService(r repository) Service {
-	return &service{r: r}
+	return service{r: r}
 }
 
-func (s *service) WorkOnWidget(id uint) error {
+func (s service) WorkOnWidget(id uint) error {
 	rw, err := s.r.GetWidget(id)
 
 	if err != nil {
