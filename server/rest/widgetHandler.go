@@ -12,11 +12,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func GetWidgets(l reading.Service) func(w http.ResponseWriter, r *http.Request) {
+func GetWidgets(rs reading.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
-		widgets, err := l.GetAllWidgets()
+		widgets, err := rs.GetAllWidgets()
 
 		if err != nil {
 			fmt.Println(err)
@@ -27,7 +27,7 @@ func GetWidgets(l reading.Service) func(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-func GetWidget(l reading.Service) func(w http.ResponseWriter, r *http.Request) {
+func GetWidget(rs reading.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
@@ -39,7 +39,7 @@ func GetWidget(l reading.Service) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		widget, err := l.GetWidget(uint(id))
+		widget, err := rs.GetWidget(uint(id))
 
 		if err != nil {
 			fmt.Println(err)
