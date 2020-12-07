@@ -29,7 +29,7 @@ func (s *service) WorkOnWidget(id uint) error {
 		return err
 	}
 
-	widget := &Widget{Value: rw.Value}
+	widget := Widget{Value: rw.Value}
 	widget.Work()
 
 	sw := saving.Widget{
