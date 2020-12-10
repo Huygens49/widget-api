@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Huygens49/widget-api/working"
+	"github.com/Huygens49/widget-api/pkg/working"
 	"github.com/gorilla/mux"
 )
 

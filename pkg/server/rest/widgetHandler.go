@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Huygens49/widget-api/saving"
+	"github.com/Huygens49/widget-api/pkg/saving"
 
-	"github.com/Huygens49/widget-api/reading"
+	"github.com/Huygens49/widget-api/pkg/reading"
 	"github.com/gorilla/mux"
 )
 

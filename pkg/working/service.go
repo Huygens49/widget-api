@@ -1,8 +1,8 @@
 package working
 
 import (
-	"github.com/Huygens49/widget-api/reading"
-	"github.com/Huygens49/widget-api/saving"
+	"github.com/Huygens49/widget-api/pkg/reading"
+	"github.com/Huygens49/widget-api/pkg/saving"
 )
 
 type repository interface {

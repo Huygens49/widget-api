@@ -1,6 +1,6 @@
 package saving
 
-import "github.com/Huygens49/widget-api/reading"
+import "github.com/Huygens49/widget-api/pkg/reading"
 
 type repository interface {
 	AddWidget(widget Widget) (*reading.Widget, error)

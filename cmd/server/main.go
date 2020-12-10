@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Huygens49/widget-api/reading"
-	"github.com/Huygens49/widget-api/saving"
-	"github.com/Huygens49/widget-api/server/rest"
-	"github.com/Huygens49/widget-api/working"
+	"github.com/Huygens49/widget-api/pkg/reading"
+	"github.com/Huygens49/widget-api/pkg/saving"
+	"github.com/Huygens49/widget-api/pkg/server/rest"
+	"github.com/Huygens49/widget-api/pkg/working"
 
-	"github.com/Huygens49/widget-api/config"
-	"github.com/Huygens49/widget-api/storage/database"
+	"github.com/Huygens49/widget-api/pkg/config"
+	"github.com/Huygens49/widget-api/pkg/storage/database"
 	"github.com/gorilla/mux"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -21,6 +21,7 @@ TODO
 -Error Handling
 -Exception Logging
 -Maybe a domain object mapper?
+-Maybe make a CLI that can migrate the db instead?
 */
 func main() {
 	fmt.Println("Starting...")

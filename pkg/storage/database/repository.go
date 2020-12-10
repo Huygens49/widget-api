@@ -3,8 +3,8 @@ package database
 import (
 	"gorm.io/gorm"
 
-	"github.com/Huygens49/widget-api/reading"
-	"github.com/Huygens49/widget-api/saving"
+	"github.com/Huygens49/widget-api/pkg/reading"
+	"github.com/Huygens49/widget-api/pkg/saving"
 )
 
 type Repository struct {
