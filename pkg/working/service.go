@@ -6,7 +6,7 @@ import (
 )
 
 type repository interface {
-	GetWidget(id uint) (*reading.Widget, error)
+	GetWidget(id uint) (reading.Widget, error)
 	UpdateWidget(id uint, widget saving.Widget) error
 }
 
@@ -19,10 +19,10 @@ type service struct {
 }
 
 func NewService(r repository) Service {
-	return &service{r: r}
+	return service{r: r}
 }
 
-func (s *service) WorkOnWidget(id uint) error {
+func (s service) WorkOnWidget(id uint) error {
 	rw, err := s.r.GetWidget(id)
 
 	if err != nil {

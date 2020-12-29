@@ -1,21 +1,20 @@
 package database
 
 import (
-	"gorm.io/gorm"
-
 	"github.com/Huygens49/widget-api/pkg/reading"
 	"github.com/Huygens49/widget-api/pkg/saving"
+	"gorm.io/gorm"
 )
 
 type Repository struct {
 	db *gorm.DB
 }
 
-func NewRepository(db *gorm.DB) *Repository {
-	return &Repository{db: db}
+func NewRepository(db *gorm.DB) Repository {
+	return Repository{db: db}
 }
 
-func (r *Repository) GetAllWidgets() ([]reading.Widget, error) {
+func (r Repository) GetAllWidgets() ([]reading.Widget, error) {
 	var widgetEntities []WidgetEntity
 	result := r.db.Find(&widgetEntities)
 
@@ -32,7 +31,6 @@ func (r *Repository) GetAllWidgets() ([]reading.Widget, error) {
 			Value:       we.Value,
 			CreatedAt:   we.CreatedAt,
 			UpdatedAt:   we.UpdatedAt,
-			DeletedAt:   we.DeletedAt.Time,
 		}
 
 		widgets[i] = widget
@@ -41,12 +39,12 @@ func (r *Repository) GetAllWidgets() ([]reading.Widget, error) {
 	return widgets, nil
 }
 
-func (r *Repository) GetWidget(id uint) (*reading.Widget, error) {
+func (r Repository) GetWidget(id uint) (reading.Widget, error) {
 	var we WidgetEntity
 	result := r.db.First(&we, id)
 
 	if result.Error != nil {
-		return nil, result.Error
+		return reading.Widget{}, result.Error
 	}
 
 	widget := reading.Widget{
@@ -56,13 +54,12 @@ func (r *Repository) GetWidget(id uint) (*reading.Widget, error) {
 		Value:       we.Value,
 		CreatedAt:   we.CreatedAt,
 		UpdatedAt:   we.UpdatedAt,
-		DeletedAt:   we.DeletedAt.Time,
 	}
 
-	return &widget, nil
+	return widget, nil
 }
 
-func (r *Repository) AddWidget(widget saving.Widget) (*reading.Widget, error) {
+func (r Repository) AddWidget(widget saving.Widget) (reading.Widget, error) {
 	we := &WidgetEntity{
 		Description: widget.Description,
 		Owner:       widget.Owner,
@@ -72,13 +69,13 @@ func (r *Repository) AddWidget(widget saving.Widget) (*reading.Widget, error) {
 	result := r.db.Create(we)
 
 	if result.Error != nil {
-		return nil, result.Error
+		return reading.Widget{}, result.Error
 	}
 
 	return r.GetWidget(we.ID)
 }
 
-func (r *Repository) UpdateWidget(id uint, widget saving.Widget) error {
+func (r Repository) UpdateWidget(id uint, widget saving.Widget) error {
 	var we WidgetEntity
 	result := r.db.First(&we, id)
 

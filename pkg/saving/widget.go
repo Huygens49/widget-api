@@ -1,7 +1,7 @@
 package saving
 
 type Widget struct {
-	Description string
-	Owner       string
-	Value       int
+	Description string `json:"description"`
+	Owner       string `json:"owner"`
+	Value       int    `json:"value"`
 }

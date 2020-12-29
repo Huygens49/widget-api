@@ -14,7 +14,7 @@ func PostWork(wrk working.Service) func(w http.ResponseWriter, r *http.Request) 
 		w.Header().Set("Content-Type", "application/json")
 
 		params := mux.Vars(r)
-		id, err := strconv.ParseUint(params["id"], 10, 0)
+		id, err := strconv.Atoi(params["id"])
 
 		if err != nil {
 			fmt.Println("Conversion error")

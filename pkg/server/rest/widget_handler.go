@@ -6,9 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Huygens49/widget-api/pkg/saving"
-
 	"github.com/Huygens49/widget-api/pkg/reading"
+	"github.com/Huygens49/widget-api/pkg/saving"
 	"github.com/gorilla/mux"
 )
 
@@ -32,7 +31,7 @@ func GetWidget(rs reading.Service) func(w http.ResponseWriter, r *http.Request) 
 		w.Header().Set("Content-Type", "application/json")
 
 		params := mux.Vars(r)
-		id, err := strconv.ParseUint(params["id"], 10, 0)
+		id, err := strconv.Atoi(params["id"])
 
 		if err != nil {
 			fmt.Println("Conversion error")
@@ -87,7 +86,7 @@ func PutWidget(s saving.Service) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		params := mux.Vars(r)
-		id, err := strconv.ParseUint(params["id"], 10, 0)
+		id, err := strconv.Atoi(params["id"])
 
 		if err != nil {
 			fmt.Println("Conversion error")

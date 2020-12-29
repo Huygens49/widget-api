@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
+	"github.com/Huygens49/widget-api/pkg/config"
 	"github.com/Huygens49/widget-api/pkg/reading"
 	"github.com/Huygens49/widget-api/pkg/saving"
 	"github.com/Huygens49/widget-api/pkg/server/rest"
-	"github.com/Huygens49/widget-api/pkg/working"
-
-	"github.com/Huygens49/widget-api/pkg/config"
 	"github.com/Huygens49/widget-api/pkg/storage/database"
+	"github.com/Huygens49/widget-api/pkg/working"
 	"github.com/gorilla/mux"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -54,7 +54,7 @@ func main() {
 	router.HandleFunc("/work/{id}", rest.PostWork(wrk)).Methods("POST")
 
 	fmt.Println("Listening on port 8080...")
-	http.ListenAndServe(":8080", router)
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 func migrateDatabase() (*gorm.DB, error) {
