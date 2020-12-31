@@ -22,8 +22,8 @@ func (r Repository) GetAllWidgets() ([]reading.Widget, error) {
 		return nil, result.Error
 	}
 
-	widgets := make([]reading.Widget, result.RowsAffected)
-	for i, we := range widgetEntities {
+	var widgets []reading.Widget
+	for _, we := range widgetEntities {
 		widget := reading.Widget{
 			ID:          we.ID,
 			Description: we.Description,
@@ -33,7 +33,7 @@ func (r Repository) GetAllWidgets() ([]reading.Widget, error) {
 			UpdatedAt:   we.UpdatedAt,
 		}
 
-		widgets[i] = widget
+		widgets = append(widgets, widget)
 	}
 
 	return widgets, nil
@@ -60,13 +60,13 @@ func (r Repository) GetWidget(id uint) (reading.Widget, error) {
 }
 
 func (r Repository) AddWidget(widget saving.Widget) (reading.Widget, error) {
-	we := &WidgetEntity{
+	we := WidgetEntity{
 		Description: widget.Description,
 		Owner:       widget.Owner,
 		Value:       widget.Value,
 	}
 
-	result := r.db.Create(we)
+	result := r.db.Create(&we)
 
 	if result.Error != nil {
 		return reading.Widget{}, result.Error
