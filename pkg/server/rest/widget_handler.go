@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Huygens49/widget-api/pkg/reading"
-	"github.com/Huygens49/widget-api/pkg/saving"
+	"github.com/Huygens49/widget-api/pkg/read"
+	"github.com/Huygens49/widget-api/pkg/write"
 	"github.com/gorilla/mux"
 )
 
-func GetWidgets(rs reading.Service) func(w http.ResponseWriter, r *http.Request) {
+func GetWidgets(rs read.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
@@ -26,7 +26,7 @@ func GetWidgets(rs reading.Service) func(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-func GetWidget(rs reading.Service) func(w http.ResponseWriter, r *http.Request) {
+func GetWidget(rs read.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
@@ -49,11 +49,11 @@ func GetWidget(rs reading.Service) func(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-func PostWidget(s saving.Service) func(w http.ResponseWriter, r *http.Request) {
+func PostWidget(s write.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
-		var widget saving.Widget
+		var widget write.Widget
 		err := json.NewDecoder(r.Body).Decode(&widget)
 
 		if err != nil {
@@ -73,11 +73,11 @@ func PostWidget(s saving.Service) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func PutWidget(s saving.Service) func(w http.ResponseWriter, r *http.Request) {
+func PutWidget(s write.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
-		var widget saving.Widget
+		var widget write.Widget
 		err := json.NewDecoder(r.Body).Decode(&widget)
 
 		if err != nil {

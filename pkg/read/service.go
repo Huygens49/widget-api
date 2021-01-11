@@ -1,4 +1,4 @@
-package reading
+package read
 
 type repository interface {
 	GetWidget(id uint) (Widget, error)

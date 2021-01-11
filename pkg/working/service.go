@@ -1,13 +1,13 @@
 package working
 
 import (
-	"github.com/Huygens49/widget-api/pkg/reading"
-	"github.com/Huygens49/widget-api/pkg/saving"
+	"github.com/Huygens49/widget-api/pkg/read"
+	"github.com/Huygens49/widget-api/pkg/write"
 )
 
 type repository interface {
-	GetWidget(id uint) (reading.Widget, error)
-	UpdateWidget(id uint, widget saving.Widget) error
+	GetWidget(id uint) (read.Widget, error)
+	UpdateWidget(id uint, widget write.Widget) error
 }
 
 type Service interface {
@@ -32,7 +32,7 @@ func (s service) WorkOnWidget(id uint) error {
 	widget := Widget{Value: rw.Value}
 	widget.Work()
 
-	sw := saving.Widget{
+	sw := write.Widget{
 		Description: rw.Description,
 		Owner:       rw.Owner,
 		Value:       widget.Value,

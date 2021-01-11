@@ -1,4 +1,4 @@
-package saving
+package write
 
 type Widget struct {
 	Description string `json:"description"`

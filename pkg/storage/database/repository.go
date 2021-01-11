@@ -1,95 +1,71 @@
 package database
 
 import (
-	"github.com/Huygens49/widget-api/pkg/reading"
-	"github.com/Huygens49/widget-api/pkg/saving"
-	"gorm.io/gorm"
+	"database/sql"
+
+	"github.com/Huygens49/widget-api/pkg/read"
+	"github.com/Huygens49/widget-api/pkg/write"
 )
 
 type Repository struct {
-	db *gorm.DB
+	db *sql.DB
 }
 
-func NewRepository(db *gorm.DB) Repository {
+func NewRepository(db *sql.DB) Repository {
 	return Repository{db: db}
 }
 
-func (r Repository) GetAllWidgets() ([]reading.Widget, error) {
-	var widgetEntities []WidgetEntity
-	result := r.db.Find(&widgetEntities)
+func (r Repository) GetAllWidgets() ([]read.Widget, error) {
+	var widgets []read.Widget
+	query := "select id, created_at, updated_at, description, owner, value from widgets where deleted_at is null"
 
-	if result.Error != nil {
-		return nil, result.Error
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
 	}
+	defer rows.Close()
 
-	var widgets []reading.Widget
-	for _, we := range widgetEntities {
-		widget := reading.Widget{
-			ID:          we.ID,
-			Description: we.Description,
-			Owner:       we.Owner,
-			Value:       we.Value,
-			CreatedAt:   we.CreatedAt,
-			UpdatedAt:   we.UpdatedAt,
+	for rows.Next() {
+		var w read.Widget
+		err := rows.Scan(&w.ID, &w.CreatedAt, &w.UpdatedAt, &w.Description, &w.Owner, &w.Value)
+
+		if err != nil {
+			return nil, err
 		}
 
-		widgets = append(widgets, widget)
+		widgets = append(widgets, w)
 	}
 
 	return widgets, nil
 }
 
-func (r Repository) GetWidget(id uint) (reading.Widget, error) {
-	var we WidgetEntity
-	result := r.db.First(&we, id)
+func (r Repository) GetWidget(id uint) (read.Widget, error) {
+	var w read.Widget
+	query := "select id, created_at, updated_at, description, owner, value from widgets where id = $1 and deleted_at is null"
 
-	if result.Error != nil {
-		return reading.Widget{}, result.Error
+	err := r.db.QueryRow(query, id).Scan(&w.ID, &w.CreatedAt, &w.UpdatedAt, &w.Description, &w.Owner, &w.Value)
+	if err != nil {
+		return read.Widget{}, err
 	}
 
-	widget := reading.Widget{
-		ID:          we.ID,
-		Description: we.Description,
-		Owner:       we.Owner,
-		Value:       we.Value,
-		CreatedAt:   we.CreatedAt,
-		UpdatedAt:   we.UpdatedAt,
-	}
-
-	return widget, nil
+	return w, nil
 }
 
-func (r Repository) AddWidget(widget saving.Widget) (reading.Widget, error) {
-	we := WidgetEntity{
-		Description: widget.Description,
-		Owner:       widget.Owner,
-		Value:       widget.Value,
+func (r Repository) AddWidget(widget write.Widget) (read.Widget, error) {
+	cmd := "insert into widgets(created_at, updated_at, description, owner, value) values(current_timestamp, current_timestamp, $1, $2, $3) returning id"
+	id := uint(0)
+
+	err := r.db.QueryRow(cmd, widget.Description, widget.Owner, widget.Value).Scan(&id)
+	if err != nil {
+		return read.Widget{}, err
 	}
 
-	result := r.db.Create(&we)
-
-	if result.Error != nil {
-		return reading.Widget{}, result.Error
-	}
-
-	return r.GetWidget(we.ID)
+	return r.GetWidget(id)
 }
 
-func (r Repository) UpdateWidget(id uint, widget saving.Widget) error {
-	var we WidgetEntity
-	result := r.db.First(&we, id)
+func (r Repository) UpdateWidget(id uint, widget write.Widget) error {
+	cmd := "update widgets set description = $1, owner = $2, value = $3, updated_at = current_timestamp where id = $4"
+	_, err := r.db.Exec(cmd, widget.Description, widget.Owner, widget.Value, id)
 
-	if result.Error != nil {
-		return result.Error
-	}
-
-	ue := WidgetEntity{
-		Description: widget.Description,
-		Owner:       widget.Owner,
-		Value:       widget.Value,
-	}
-
-	result = r.db.Model(&we).Updates(ue)
-
-	return result.Error
+	return err
 }

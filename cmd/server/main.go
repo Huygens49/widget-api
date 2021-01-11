@@ -1,19 +1,19 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/Huygens49/widget-api/pkg/config"
-	"github.com/Huygens49/widget-api/pkg/reading"
-	"github.com/Huygens49/widget-api/pkg/saving"
+	"github.com/Huygens49/widget-api/pkg/read"
 	"github.com/Huygens49/widget-api/pkg/server/rest"
 	"github.com/Huygens49/widget-api/pkg/storage/database"
 	"github.com/Huygens49/widget-api/pkg/working"
+	"github.com/Huygens49/widget-api/pkg/write"
 	"github.com/gorilla/mux"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	_ "github.com/lib/pq"
 )
 
 /*
@@ -26,8 +26,9 @@ TODO
 func main() {
 	fmt.Println("Starting...")
 
-	// Setting up GORM database
-	db, err := migrateDatabase()
+	// Setting up SQL database
+	db, err := sql.Open("postgres", config.GetDatabaseString())
+	defer db.Close()
 
 	if err != nil {
 		fmt.Println("ERROR:", err)
@@ -36,8 +37,8 @@ func main() {
 
 	// Setting up dependency injection
 	r := database.NewRepository(db)
-	l := reading.NewService(r)
-	s := saving.NewService(r)
+	l := read.NewService(r)
+	s := write.NewService(r)
 	wrk := working.NewService(r)
 
 	// Setup the router
@@ -55,21 +56,4 @@ func main() {
 
 	fmt.Println("Listening on port 8080...")
 	log.Fatal(http.ListenAndServe(":8080", router))
-}
-
-func migrateDatabase() (*gorm.DB, error) {
-	dsn := config.GetDatabaseString()
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.AutoMigrate(&database.WidgetEntity{})
-
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
 }
