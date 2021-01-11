@@ -19,6 +19,7 @@ func GetWidgets(rs read.Service) func(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -35,6 +36,7 @@ func GetWidget(rs read.Service) func(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Println("Conversion error")
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -42,6 +44,7 @@ func GetWidget(rs read.Service) func(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -58,6 +61,7 @@ func PostWidget(s write.Service) func(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -65,6 +69,7 @@ func PostWidget(s write.Service) func(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -82,6 +87,7 @@ func PutWidget(s write.Service) func(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -90,10 +96,40 @@ func PutWidget(s write.Service) func(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Println("Conversion error")
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		s.UpdateWidget(uint(id), widget)
+		err = s.UpdateWidget(uint(id), widget)
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+	}
+}
+
+func DeleteWidget(s write.Service) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		params := mux.Vars(r)
+		id, err := strconv.Atoi(params["id"])
+
+		if err != nil {
+			fmt.Println("Conversion error")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		err = s.DeleteWidget(uint(id))
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 
 		w.WriteHeader(http.StatusNoContent)
 	}

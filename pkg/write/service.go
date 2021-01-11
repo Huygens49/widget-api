@@ -5,11 +5,13 @@ import "github.com/Huygens49/widget-api/pkg/read"
 type repository interface {
 	AddWidget(widget Widget) (read.Widget, error)
 	UpdateWidget(id uint, widget Widget) error
+	DeleteWidget(id uint) error
 }
 
 type Service interface {
 	AddWidget(widget Widget) (read.Widget, error)
 	UpdateWidget(id uint, widget Widget) error
+	DeleteWidget(id uint) error
 }
 
 type service struct {
@@ -26,4 +28,8 @@ func (s service) AddWidget(w Widget) (read.Widget, error) {
 
 func (s service) UpdateWidget(id uint, w Widget) error {
 	return s.r.UpdateWidget(id, w)
+}
+
+func (s service) DeleteWidget(id uint) error {
+	return s.r.DeleteWidget(id)
 }

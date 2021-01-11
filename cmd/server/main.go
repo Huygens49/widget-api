@@ -37,22 +37,23 @@ func main() {
 
 	// Setting up dependency injection
 	r := database.NewRepository(db)
-	l := read.NewService(r)
-	s := write.NewService(r)
-	wrk := working.NewService(r)
+	rs := read.NewService(r)
+	ws := write.NewService(r)
+	wrks := working.NewService(r)
 
 	// Setup the router
 	router := mux.NewRouter()
 	router.StrictSlash(true) // This makes it so "/widgets/" will automatically redirect to "/widgets"
 
 	// widgets
-	router.HandleFunc("/widgets", rest.GetWidgets(l)).Methods("GET")
-	router.HandleFunc("/widgets", rest.PostWidget(s)).Methods("POST")
-	router.HandleFunc("/widgets/{id}", rest.GetWidget(l)).Methods("GET")
-	router.HandleFunc("/widgets/{id}", rest.PutWidget(s)).Methods("PUT")
+	router.HandleFunc("/widgets", rest.GetWidgets(rs)).Methods("GET")
+	router.HandleFunc("/widgets", rest.PostWidget(ws)).Methods("POST")
+	router.HandleFunc("/widgets/{id}", rest.GetWidget(rs)).Methods("GET")
+	router.HandleFunc("/widgets/{id}", rest.PutWidget(ws)).Methods("PUT")
+	router.HandleFunc("/widgets/{id}", rest.DeleteWidget(ws)).Methods("DELETE")
 
 	// work
-	router.HandleFunc("/work/{id}", rest.PostWork(wrk)).Methods("POST")
+	router.HandleFunc("/work/{id}", rest.PostWork(wrks)).Methods("POST")
 
 	fmt.Println("Listening on port 8080...")
 	log.Fatal(http.ListenAndServe(":8080", router))

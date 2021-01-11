@@ -69,3 +69,10 @@ func (r Repository) UpdateWidget(id uint, widget write.Widget) error {
 
 	return err
 }
+
+func (r Repository) DeleteWidget(id uint) error {
+	cmd := "update widgets set deleted_at = current_timestamp where id = $1"
+	_, err := r.db.Exec(cmd, id)
+
+	return err
+}
